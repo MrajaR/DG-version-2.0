@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#message {
+    margin: 20px 0;
+    font-size: 18px;
+
+}
+
+/* Styling untuk heading */
+h1 {
+    font-size: 5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 3em;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0.75em;
+    margin-bottom: 0.5em;
+}
+
+/* Styling untuk paragraf */
+p {
+    font-size: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    line-height: 1.6;
+}
+
+/* Styling untuk list */
+ul {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+}
+
+ul li {
+    margin-bottom: 0.5em;
+}
+
+/* Styling untuk keputusan yang di-bold */
+b {
+    font-weight: bold;
+    color: red; /* Ubah warna teks jika diperlukan */
+}
