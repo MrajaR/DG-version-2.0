@@ -18,3 +18,5 @@ instructorembedding==1.0.1
 pytesseract==0.3.13
 # mysql-connector-python==9.0.0
 chromadb
+unstructured[pdf]==0.16.0
+langchain_chroma
