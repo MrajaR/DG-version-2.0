@@ -64,8 +64,8 @@ class DangerousGoodsAnalyzer:
 
         if user_uuid not in [x.name for x in self.client.list_collections()]:
             print('Collection has not been created, hence create new collection')
-
-        print('Collection has already been created, used existing collection')
+        else:
+            print('Collection has already been created, used existing collection')
 
         self.collection = self.client.get_or_create_collection(
             f"{user_uuid}",
