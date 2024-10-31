@@ -1,8 +1,15 @@
 import chromadb
+import sys
+import os
+
+# Add the path to the parent directory containing the config module
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from config import Config
 
 class CheckChromadb:
     def __init__(self):
-        self.client = chromadb.PersistentClient(path='MSDS_vectorDB')
+        self.client = chromadb.PersistentClient(path=Config.MSDS_VECTOR_DB_PATH)
         
         # Get the list of collections
         collections = self.client.list_collections()

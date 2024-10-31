@@ -34,7 +34,20 @@ button:hover {
 #message {
     margin: 20px 0;
     font-size: 18px;
+}
 
+/* CSS untuk animasi spinner */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #4A90E2;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* Styling untuk heading */
@@ -45,7 +58,7 @@ h1 {
 }
 
 h2 {
-    font-size: 3em;
+    font-size: 1rem;
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.5em;

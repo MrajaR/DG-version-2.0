@@ -1,44 +1,29 @@
+import torch
 import chromadb
 from chromadb.utils import embedding_functions
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
+
 from .utils import Extractor, CheckChromadb
-import os
 from dotenv import load_dotenv
-import torch
+from config import Config
+import os
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-DEVICE = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-
 class DangerousGoodsAnalyzer:
     def __init__(self):
-        self.llm_analyze = ChatGroq(groq_api_key=GROQ_API_KEY, model_name='Llama-3.1-70b-Versatile')
+        self.llm_analyze = Config.get_llm(os.getenv('GROQ_API_KEY'))
 
-        self.analyze_prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "You are an expert in analyzing Material Safety Data Sheets (MSDS) based on the International Maritime Dangerous Goods (IMDG) Code. Your task is to:\n"
-                    "IMDG Classification: Identify the correct IMDG classification for the goods, including their UN number, class, and packing group.\n"
-                    "Handling, Packaging, and Package to be used: Provide detailed guidelines on safe handling, including necessary precautions and equipment during transport. Recommend the correct packaging according to IMDG regulations, and tell the users about the type of containers, packages required, and specify the package that needs to be used.\n"
-                    "Loading Decision: Confidently decide whether the material can be safely loaded onto a ship. Consider compatibility with other cargo, environmental risks, and overall vessel safety.\n"
-                    "Responsibility: You are fully responsible for ensuring the correct decision is made regarding loading and storage. Any mistakes will be your responsibility.\n"
-                    "Your response must be formatted in HTML tag so that it can be rendered neatly in the web browser and written in concise Indonesian language. Any failure to follow these instructions will have consequences.",
-                ),
-                ("human", "{text}"),
-            ]
-        )
+        self.analyze_prompt = Config.get_prompt_template()
 
         self.analyze_chain = self.analyze_prompt | self.llm_analyze
 
-        self.client = chromadb.PersistentClient(path='MSDS_vectorDB')
+        self.client = chromadb.PersistentClient(path=Config.MSDS_VECTOR_DB_PATH)
         self.embeddings_for_chroma = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L12-v2"
+            model_name=Config.EMBEDDING_MODEL
         )
         self.collection = None
 
@@ -78,8 +63,8 @@ class DangerousGoodsAnalyzer:
         
     def get_relevant_chunks(self):
         results = self.collection.query(
-                query_texts=["product name", "hazardous classification", "packaging and handling", 'UN number and description'], # Chroma will embed this for you
-                n_results=2, # how many results to return
+                query_texts=Config.QUERY_LIST, # Chroma will embed this for you
+                n_results=Config.TOTAL_K_RESULTS, # how many results to return
                 include=["documents"]
         )
 

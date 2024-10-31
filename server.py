@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
+
+
 from LLMRAG import DangerousGoodsAnalyzer
+from LLMRAG import Config
+
 import os
 import uuid
 
@@ -46,10 +50,11 @@ def analyze_msds():
 def process_uploaded_msds():
     user_id = session['user_id']
 
-    if 'file' not in request.files:
+    if 'pdf' not in request.files:
+        print('No file part in the request')
         return jsonify({'Response': 'Tolong upload file PDF'}), 400
 
-    file = request.files['file']
+    file = request.files['pdf']
 
     # Store file in a user-specific directory
     file_path = os.path.join(PDF_FOLDER, file.filename)
