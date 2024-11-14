@@ -12,10 +12,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Set a secret key to sign the session cookie
-app.secret_key = 'your_secret_key_here'  # Replace with a strong secret key
+app.secret_key = Config.FLASK_SECRET_KEY  # Replace with a strong secret key
 
-PDF_FOLDER = 'user_pdf'
-os.makedirs(PDF_FOLDER, exist_ok=True)
+# PDF_FOLDER = 'user_pdf'
+os.makedirs(Config.PDF_FOLDER, exist_ok=True)
 analyzer = DangerousGoodsAnalyzer()
 
 # Automatically assign a UUID to each new visitor
@@ -57,10 +57,10 @@ def process_uploaded_msds():
     file = request.files['pdf']
 
     # Store file in a user-specific directory
-    file_path = os.path.join(PDF_FOLDER, file.filename)
+    file_path = os.path.join(Config.PDF_FOLDER, file.filename)
     
-    if file.filename in os.listdir(PDF_FOLDER):
-        print('File already exists in', PDF_FOLDER)
+    if file.filename in os.listdir(Config.PDF_FOLDER):
+        print('File already exists in', Config.PDF_FOLDER)
         os.remove(file_path)
 
     file.save(file_path)
@@ -72,4 +72,4 @@ def process_uploaded_msds():
     return jsonify({'Response': 'MSDS processing success'}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host="0.0.0.0")

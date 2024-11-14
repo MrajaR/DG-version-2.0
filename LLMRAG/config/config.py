@@ -29,6 +29,8 @@ class Config:
 
     TOTAL_K_RESULTS = 2
 
+    FLASK_SECRET_KEY = "ambatukam"
+
     @classmethod
     def get_prompt_template(cls):
         return ChatPromptTemplate.from_messages(cls.PROMPT_TEMPLATE)

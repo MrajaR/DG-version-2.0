@@ -1,8 +1,6 @@
 import torch
 import chromadb
 from chromadb.utils import embedding_functions
-from langchain_groq import ChatGroq
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 
