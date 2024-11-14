@@ -29,12 +29,29 @@ class Config:
 
     TOTAL_K_RESULTS = 2
 
+    FLASK_SECRET_KEY = "ambatukam"
+
     @classmethod
     def get_prompt_template(cls):
+        """
+        Returns a ChatPromptTemplate object based on the PROMPT_TEMPLATE class variable.
+
+        Returns:
+            ChatPromptTemplate: a ChatPromptTemplate object
+        """
         return ChatPromptTemplate.from_messages(cls.PROMPT_TEMPLATE)
     
     @classmethod
     def get_llm(cls, groq_api_key):
+        """
+        Returns a ChatGroq model based on the LLM_MODEL class variable and the provided Groq API key.
+
+        Args:
+            groq_api_key (str): the Groq API key
+
+        Returns:
+            ChatGroq: a ChatGroq model
+        """
         return ChatGroq(groq_api_key=groq_api_key, model_name=cls.LLM_MODEL)
 
 

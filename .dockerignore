@@ -1,0 +1,35 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Ignore virtual environments
+venv/
+env/
+DG_2_env/
+
+# Ignore Jupyter notebooks if they aren’t needed in the Docker image
+*.ipynb
+
+# Ignore environment files with sensitive information
+.env
+
+
+# Ignore other development and temporary files
+*.log
+*.sqlite3
+*.db
+*.sqlite
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignore local user PDFs if they’re not needed in the image
+user_pdf/
+
+# Ignore IDE-specific directories or files (e.g., VSCode settings)
+.vscode/
+.idea/
