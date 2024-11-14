@@ -9,6 +9,15 @@ from config import Config
 
 class CheckChromadb:
     def __init__(self):
+        """
+        Initializes the CheckChromadb class, setting up a persistent client for ChromaDB
+        and managing collections. If there are more than 10 collections, the oldest one
+        is deleted to maintain a maximum of 10 collections. The current collections are
+        printed to the console.
+
+        Attributes:
+            client (PersistentClient): A persistent client for connecting to ChromaDB.
+        """
         self.client = chromadb.PersistentClient(path=Config.MSDS_VECTOR_DB_PATH)
         
         # Get the list of collections

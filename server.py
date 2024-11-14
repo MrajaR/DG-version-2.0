@@ -18,7 +18,7 @@ app.secret_key = Config.FLASK_SECRET_KEY  # Replace with a strong secret key
 login_manager.init_app(app)  # Initialize login manager
 login_manager.login_view = 'login'  # Set the login route for unauthorized access
 
-os.makedirs(Config.PDF_FOLDER, exist_ok=True)
+os.makedirs(Config.PDF_FOLDER, exist_ok=True) # Check if the directory exists, otherwise create it
 
 analyzer = DangerousGoodsAnalyzer()
 
@@ -55,6 +55,17 @@ def index():
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Handles login requests from users.
+
+    GET requests will render the login.html template to display the login form.
+    POST requests will attempt to log the user in using the provided username and
+    password. If the credentials are invalid, the user will be redirected back to
+    the login page with an error message.
+
+    :return: The rendered HTML template for the login page if the request method is
+        GET, or a redirect to the index page if the login is successful.
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -74,6 +85,14 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """
+    Logs the user out and redirects them to the login page.
+
+    This view function is decorated with @login_required, which means that only
+    authenticated users can access this endpoint.
+
+    :return: A redirect to the login page
+    """
     logout_user()  # Log the user out
     print("You have been logged out.", "info")
     return redirect(url_for('login'))  # Redirect to login page after logging out
