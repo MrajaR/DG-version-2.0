@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, flash, redirect, render_template, request, jsonify, session, url_for
 from flask_cors import CORS
-
+from flask_login import current_user, login_required, login_user, logout_user
 
 from LLMRAG import DangerousGoodsAnalyzer
 from LLMRAG import Config
+from models import User, users, login_manager
 
 import os
 import uuid
@@ -14,8 +15,11 @@ CORS(app)
 # Set a secret key to sign the session cookie
 app.secret_key = Config.FLASK_SECRET_KEY  # Replace with a strong secret key
 
-# PDF_FOLDER = 'user_pdf'
+login_manager.init_app(app)  # Initialize login manager
+login_manager.login_view = 'login'  # Set the login route for unauthorized access
+
 os.makedirs(Config.PDF_FOLDER, exist_ok=True)
+
 analyzer = DangerousGoodsAnalyzer()
 
 # Automatically assign a UUID to each new visitor
@@ -33,7 +37,9 @@ def assign_user_uuid():
         print(f"Assigned new UUID: {session['user_id']}")
 
 @app.route('/')
+@login_required
 def index():
+    print(f"Current user ID: {current_user.id}")  
     # Get the UUID of the current user from the session
     """
     Displays the main page of the web application, which allows users to upload a PDF
@@ -45,6 +51,32 @@ def index():
     print(f"Current user UUID: {user_uuid}")
     
     return render_template('index.html')
+
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check user credentials
+        for user in users.values():  # Check against users dictionary
+            if user.username == username and user.check_password(password):
+                login_user(user)  # Log the user in
+                print('login successful')
+                return redirect(url_for('index'))
+        print("Invalid username or password", "danger")
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+# Logout route
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # Log the user out
+    print("You have been logged out.", "info")
+    return redirect(url_for('login'))  # Redirect to login page after logging out
 
 @app.route('/analyze-msds', methods=['POST'])
 def analyze_msds():
